@@ -58,7 +58,7 @@ end
 # http://coderrr.wordpress.com/2008/05/28/get-your-local-ip-address/
 def local_ip4
   orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
- 
+
   UDPSocket.open do |s|
     begin
       s.connect '173.194.113.119', 1
@@ -67,23 +67,23 @@ def local_ip4
       nil
     end
   end
-  
+
   ensure
     Socket.do_not_reverse_lookup = orig
 end
 
 def local_ip6
   orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
- 
+
   UDPSocket.open(Socket::AF_INET6) do |s|
     begin
       s.connect '2a00:1450:4001:80b::1018', 1
       s.addr.last
     rescue
-      nil  
+      nil
     end
   end
-  
+
   ensure
     Socket.do_not_reverse_lookup = orig
 end
@@ -120,14 +120,14 @@ if __FILE__ == $PROGRAM_NAME
   if not ip4.nil?
     entry4 = hosts.select { |entry| entry["name"].include? hostname and entry["type"] == 'A' }
     if entry4.empty?
-      puts "Create new IPv4 record for #{hostname} with #{ip}"
+      puts "Create new IPv4 record for #{hostname} with #{ip4}"
       create_record_for_host4(domrobot, domain, ip4)
     else
       old_ip4 = entry4[0]["content"]
       new_ip4 = ip4
 
       if old_ip4 != new_ip4
-        puts "Update IPv4 record for #{hostname} from #{old_ip} to #{new_ip}"
+        puts "Update IPv4 record for #{hostname} from #{old_ip4} to #{new_ip4}"
         update_record_for_host(domrobot, entry4[0]["id"], ip4)
       else
         puts "Nothing to update for IPv4, #{hostname} still has #{old_ip4}."
@@ -145,7 +145,7 @@ if __FILE__ == $PROGRAM_NAME
   end
   puts
 
-  # IPv6  
+  # IPv6
   puts "Handle IPv6 addresses:"
   entry6 = hosts.select { |entry| entry["name"].include? hostname and entry["type"] == 'AAAA' }
   if not ip6.nil?
