@@ -1,6 +1,9 @@
+#!/usr/bin/env ruby
+
 require_relative "inwx/Domrobot"
-require "json"
+require 'json'
 require 'socket'
+require 'net/http'
 
 def parse_JSON_file(filename)
   File.open( filename, "r" ) do |f|
@@ -104,7 +107,9 @@ if __FILE__ == $PROGRAM_NAME
   puts "IPv6: #{ip6}"
   puts
 
-  config = parse_JSON_file 'config.json'
+  script_path = File.expand_path(File.dirname(__FILE__))
+  config_path = "#{script_path}/config.json"
+  config = parse_JSON_file config_path
   domain = config["domain"]
   username = config["username"]
   password = config["password"]
